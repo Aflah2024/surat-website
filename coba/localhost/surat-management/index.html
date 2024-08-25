@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from localhost/surat-management/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 25 Aug 2024 04:37:50 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengelolaan Surat</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script>
+        function submitSurat() {
+            var jenis = document.getElementById('jenis').value;
+            var tujuan = document.getElementById('tujuan').value;
+            var tanggal = document.getElementById('tanggal').value;
+            var klasifikasi = document.getElementById('klasifikasi').value;
+
+            var nomorSurat = jenis + "-" + tanggal + "-" + klasifikasi + "-" + new Date().getTime();
+
+            fetch('add_surat.html', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    'nomor_surat': nomorSurat,
+                    'jenis_surat': jenis,
+                    'tujuan_surat': tujuan,
+                    'tanggal_surat': tanggal,
+                    'klasifikasi': klasifikasi
+                })
+            })
+            .then(response => response.text())
+            .then(result => {
+                alert(result);
+                loadSurat();
+            });
+
+            document.getElementById('suratForm').reset();
+        }
+
+        function showUploadForm(nomorSurat) {
+            var uploadForm = document.getElementById('uploadSection');
+            uploadForm.style.display = 'block';
+            document.getElementById('nomorSuratUpload').value = nomorSurat;
+        }
+
+        function loadSurat() {
+            fetch('fetch_surat.html')
+                .then(response => response.json())
+                .then(data => {
+                    var table = document.getElementById('suratTable').getElementsByTagName('tbody')[0];
+                    table.innerHTML = '';
+                    data.forEach(row => {
+                        var newRow = table.insertRow();
+                        newRow.insertCell(0).textContent = row.nomor_surat;
+                        newRow.insertCell(1).textContent = row.jenis_surat;
+                        newRow.insertCell(2).textContent = row.tujuan_surat;
+                        newRow.insertCell(3).textContent = row.tanggal_surat;
+                        newRow.insertCell(4).textContent = row.klasifikasi;
+                        newRow.insertCell(5).textContent = row.status_upload;
+
+                        if (row.status_upload === 'Uploaded') {
+                            newRow.insertCell(6).innerHTML = `<a href="${row.file_pdf}" target="_blank" class="btn-view">Lihat PDF</a>`;
+                        } else {
+                            newRow.insertCell(6).innerHTML = `<button onclick="showUploadForm('${row.nomor_surat}')" class="btn-upload">Upload PDF</button>`;
+                        }
+                    });
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadSurat);
+    </script>
+</head>
+<body>
+    <header class="header">
+        <h1>Pengelolaan Surat</h1>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="#">Beranda</a></li>
+                <li><a href="#formSection">Tambah Surat</a></li>
+                <li><a href="#tableSection">Daftar Surat</a></li>
+                <li><a href="#uploadSection">Upload PDF</a></li>
+            </ul>
+        </aside>
+
+        <div class="main-content">
+            <!-- Formulir Pengisian Detail Surat -->
+            <section id="formSection" class="section form-section">
+                <h2>Tambah Surat</h2>
+                <form id="suratForm">
+                    <label for="jenis">Jenis Surat:</label>
+                    <input type="text" id="jenis" name="jenis_surat" required>
+                    <label for="tujuan">Tujuan Surat:</label>
+                    <input type="text" id="tujuan" name="tujuan_surat" required>
+                    <label for="tanggal">Tanggal Surat:</label>
+                    <input type="date" id="tanggal" name="tanggal_surat" required>
+                    <label for="klasifikasi">Klasifikasi:</label>
+                    <input type="text" id="klasifikasi" name="klasifikasi" required>
+                    <button type="button" onclick="submitSurat()" class="btn-submit">Kirim Surat</button>
+                </form>
+            </section>
+
+            <!-- Tabel Daftar Surat -->
+            <section id="tableSection" class="section table-section">
+                <h2>Daftar Surat</h2>
+                <table id="suratTable">
+                    <thead>
+                        <tr>
+                            <th>Nomor Surat</th>
+                            <th>Jenis Surat</th>
+                            <th>Tujuan Surat</th>
+                            <th>Tanggal Surat</th>
+                            <th>Klasifikasi</th>
+                            <th>Status Upload</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data Surat Akan Ditambahkan di Sini -->
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Formulir Upload PDF -->
+            <section id="uploadSection" class="section upload-section" style="display: none;">
+                <h2>Unggah PDF Surat</h2>
+                <form action="http://localhost/surat-management/upload.php" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="nomorSuratUpload" name="nomor_surat">
+                    <label for="file">Upload PDF:</label>
+                    <input type="file" id="file" name="file" accept=".pdf" required>
+                    <button type="submit" class="btn-upload">Upload PDF</button>
+                </form>
+            </section>
+        </div>
+    </div>
+</body>
+
+<!-- Mirrored from localhost/surat-management/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 25 Aug 2024 04:37:50 GMT -->
+</html>

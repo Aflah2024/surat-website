@@ -1,0 +1,6 @@
+date	size'/'remotesize	flags(request:Update,Range state:File response:Modified,Chunked,gZipped)	statuscode	status ('servermsg')	MIME	Etag|Date	URL	localfile	(from URL)
+11:37:49	6058/6058	---M--	200	added ('OK')	text/html	etag:%2217aa-6207a326c68ee%22	http://localhost/surat-management/index.html	C:/My%20Web%20Sites/coba/localhost/surat-management/index.html	(from )
+11:37:50	295/295	---M--	404	error ('Not%20Found')	text/html	date:Sun,%2025%20Aug%202024%2004:37:49%20GMT	http://localhost/robots.txt		(from )
+11:37:50	2727/2727	---M--	200	added ('OK')	text/css	etag:%22aa7-6207a27e9894e%22	http://localhost/surat-management/css/styles.css	C:/My%20Web%20Sites/coba/localhost/surat-management/css/styles.css	(from http://localhost/surat-management/index.html)
+11:37:50	725/725	---M--	200	added ('OK')	text/html	date:Sun,%2025%20Aug%202024%2004:37:50%20GMT	http://localhost/surat-management/add_surat.php	C:/My%20Web%20Sites/coba/localhost/surat-management/add_surat.html	(from http://localhost/surat-management/index.html)
+11:37:50	1373/1373	---M--	200	added ('OK')	text/html	date:Sun,%2025%20Aug%202024%2004:37:50%20GMT	http://localhost/surat-management/fetch_surat.php	C:/My%20Web%20Sites/coba/localhost/surat-management/fetch_surat.html	(from http://localhost/surat-management/index.html)
